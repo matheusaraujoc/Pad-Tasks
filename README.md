@@ -47,6 +47,17 @@ Para a maioria dos usuários, basta baixar e executar.
 2.  Baixe o arquivo executável para o seu sistema operacional (ex: `Pad-Tasks-v1.0.0-win64.exe` para Windows).
 3.  Execute o arquivo. Não é necessária instalação.
 
+Para criar um novo projeto:
+
+5.  Crie um pad em alguma instância do Etherpad, de preferência em uma das que estão listadas na documentação como testadas.
+6.  Vá em "Criar novo projeto" e adicone o nome do projeto e o link do seu pad. Espere a conexão ser feita.
+7.  Após a conexão ser finalizada você pode compartilhar o ID do projeto com qualquer pessoa que também tem o programa e ela se tornara uma colaboradora do seu projeto.
+
+Para se conectar a um projeto existente:
+
+1. Vá em conectar por URL
+2. Coloque o ID que você recebeu do criador do projeto e aperte em "OK". Espere a conexão ser feita.
+
 Obs: Para o projeto ser criado, o pad deve está limpo.
 
 ### ⚠️ Aviso para Usuários Windows (Filtro SmartScreen)
