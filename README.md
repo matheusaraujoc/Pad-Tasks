@@ -43,8 +43,8 @@ A solução foi utilizar a plataforma **Etherpad Lite** como um banco de dados J
 
 Para a maioria dos usuários, basta baixar e executar.
 
-1.  Acesse a seção **[Releases](https://github.com/seu-usuario/seu-repositorio/releases)** deste repositório.
-2.  Baixe o arquivo executável para o seu sistema operacional (ex: `GerenciadorDeTarefas.exe` para Windows).
+1.  Acesse a seção **[Releases](https://github.com/matheusaraujoc/Pad-Tasks/releases)** deste repositório.
+2.  Baixe o arquivo executável para o seu sistema operacional (ex: `Pad-Tasks-v1.0.0-win64.exe` para Windows).
 3.  Execute o arquivo. Não é necessária instalação.
 
 ### ⚠️ Aviso para Usuários Windows (Filtro SmartScreen)
@@ -56,8 +56,6 @@ Ao executar o programa pela primeira vez, é provável que o Windows Defender Sm
 Para executar, siga estes passos:
 1. Na tela azul, clique em **"Mais informações"**.
 2. Um novo botão, **"Executar assim mesmo"**, aparecerá. Clique nele.
-
-![Filtro SmartScreen](https://i.imgur.com/20nLe5P.png)
 
 Você só precisará fazer isso na primeira vez que abrir o programa.
 
@@ -79,7 +77,7 @@ Se você deseja modificar o código, compilá-lo ou executá-lo a partir da font
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+    git clone [https://github.com/matheusaraujoc/Pad-Tasks.git](https://github.com/matheusaraujoc/Pad-Tasks.git)
     cd seu-repositorio
     ```
 
