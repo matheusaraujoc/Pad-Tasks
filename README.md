@@ -47,6 +47,8 @@ Para a maioria dos usuários, basta baixar e executar.
 2.  Baixe o arquivo executável para o seu sistema operacional (ex: `Pad-Tasks-v1.0.0-win64.exe` para Windows).
 3.  Execute o arquivo. Não é necessária instalação.
 
+Obs: Para o projeto ser criado, o pad deve está limpo.
+
 ### ⚠️ Aviso para Usuários Windows (Filtro SmartScreen)
 
 Ao executar o programa pela primeira vez, é provável que o Windows Defender SmartScreen exiba uma tela azul impedindo a execução, com a mensagem "O Windows protegeu o computador".
