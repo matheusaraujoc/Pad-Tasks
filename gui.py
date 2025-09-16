@@ -269,16 +269,22 @@ STATUS_OPTIONS = [ "Pendente", "Em Andamento", "Feito", "Corrigido", "Ainda não
 STATUS_TEXT_COLORS = { "Pendente": QColor("#E5C07B"), "Em Andamento": QColor("#61AFEF"), "Feito": QColor("#98C379"), "Corrigido": QColor("#98C379"), "Ainda não corrigido": QColor("#E06C75"), "Feito Parcialmente": QColor("#D19A66"), "Cancelado": QColor("#5C6370"), "A Implementar": QColor("#C678DD"), }
 CATEGORIES = ["A Fazer", "Correções", "Crítico / Urgente"]
 
-def mask_pad_id(real_id):
-    """Codifica o ID real do Pad para uma string Base64."""
-    return base64.urlsafe_b64encode(real_id.encode('utf-8')).decode('utf-8')
+def truncate_text(text, max_length):
+    """Corta um texto se ele for maior que max_length e adiciona '...'."""
+    if len(text) > max_length:
+        return text[:max_length] + "..."
+    return text
 
-def unmask_pad_id(masked_id):
-    """Decodifica uma string Base64 para o ID real do Pad."""
+def mask_url(full_url):
+    """Codifica a URL COMPLETA para uma string Base64."""
+    return base64.urlsafe_b64encode(full_url.encode('utf-8')).decode('utf-8')
+
+def unmask_url(masked_url):
+    """Decodifica uma string Base64 para a URL COMPLETA."""
     try:
-        return base64.urlsafe_b64decode(masked_id.encode('utf-8')).decode('utf-8')
+        return base64.urlsafe_b64decode(masked_url.encode('utf-8')).decode('utf-8')
     except (ValueError, TypeError, base64.binascii.Error):
-        # Retorna None se o ID for inválido/malformado
+        # Retorna None se a string for inválida/malformada
         return None
 
 # ===================================================================
@@ -298,15 +304,29 @@ class ProjectCardWidget(QWidget):
         main_layout.setContentsMargins(15, 15, 15, 15)
         main_layout.setSpacing(8)
 
-        name_label = QLabel(project_data.get('name', 'Projeto sem nome'))
-        name_label.setObjectName("ProjectNameLabel")
-        
-        real_id = self.project_url.split('/')[-1]
-        masked_id = mask_pad_id(real_id)
+        # --- LÓGICA DE TRUNCAMENTO PARA O NOME ---
+        # 1. Define um comprimento máximo para o nome do projeto
+        NAME_MAX_LENGTH = 40 
+        original_name = project_data.get('name', 'Projeto sem nome')
+        # 2. Usa a função para truncar o nome se for muito longo
+        truncated_name = truncate_text(original_name, NAME_MAX_LENGTH)
 
-        url_label = QLabel(masked_id) # Mostra o ID mascarado
+        name_label = QLabel(truncated_name) # ALTERADO: Usa o nome truncado
+        name_label.setObjectName("ProjectNameLabel")
+        # 3. Adiciona um tooltip para mostrar o nome COMPLETO ao passar o mouse
+        name_label.setToolTip(original_name) 
+
+        # --- LÓGICA DE TRUNCAMENTO PARA O LINK ---
+        # 1. Define um comprimento máximo para o link mascarado
+        URL_MAX_LENGTH = 50 
+        masked_url = mask_url(self.project_url)
+        # 2. Usa a função para truncar o link se for muito longo
+        truncated_url = truncate_text(masked_url, URL_MAX_LENGTH)
+
+        url_label = QLabel(truncated_url) # ALTERADO: Usa o link truncado
         url_label.setObjectName("ProjectUrlLabel")
-        url_label.setToolTip("ID do Projeto (copie e compartilhe este ID)") # Tooltip atualizado
+        # 3. Adiciona um tooltip para mostrar o link mascarado COMPLETO
+        url_label.setToolTip(masked_url)
         
         try:
             date_obj = datetime.fromisoformat(project_data.get('last_accessed', ''))
@@ -396,14 +416,12 @@ class WelcomeDialog(QDialog):
 
     def populate_project_list(self):
         """
-        Lê os projetos do histórico (que agora contêm 'id' em vez de 'url'),
-        reconstrói a URL completa em memória e popula a lista de cards.
+        Lê os projetos do histórico (que agora contêm a 'url' completa)
+        e popula a lista de cards.
         """
         self.project_list_widget.clear()
         
-        # A constante BASE_URL deve ser definida ou importada
-        # Para simplificar, vamos defini-la aqui:
-        BASE_URL = "https://pad.riseup.net/p/"
+        # A variável BASE_URL foi removida, pois não é mais necessária.
         
         projects_from_history = project_history.load_projects()
         
@@ -411,13 +429,17 @@ class WelcomeDialog(QDialog):
             return
 
         for project_data in projects_from_history:
-            # Reconstrói a URL completa para uso interno da interface
-            real_url = BASE_URL + project_data.get('id', '')
+            # A URL completa agora é lida diretamente do histórico.
+            real_url = project_data.get('url', '')
             
-            # Cria um dicionário temporário com a estrutura que o ProjectCardWidget espera
+            # Se por algum motivo a URL no histórico estiver vazia, pula este projeto.
+            if not real_url:
+                continue
+
+            # Cria um dicionário temporário com a estrutura que o ProjectCardWidget espera.
             card_data_for_widget = {
                 'name': project_data.get('name', 'Projeto sem nome'),
-                'url': real_url, # Passa a URL completa para o card
+                'url': real_url, # Passa a URL completa e correta para o card.
                 'last_accessed': project_data.get('last_accessed', '')
             }
             
@@ -448,12 +470,10 @@ class WelcomeDialog(QDialog):
     def on_open_project(self, url):
         self.selected_url = url; self.action = 'open'; self.accept()
     def on_copy_link(self, url):
-        real_id = url.split('/')[-1]
-        masked_id = mask_pad_id(real_id)
+        masked_url = mask_url(url) # Mascara a URL completa
         clipboard = QApplication.instance().clipboard()
-        clipboard.setText(masked_id)
-        # A chamada correta, usando argumentos nomeados (keywords)
-        QToolTip.showText(self.cursor().pos(), "ID copiado!", w=self, msecShowTime=2000)
+        clipboard.setText(masked_url)
+        QToolTip.showText(self.cursor().pos(), "Link copiado!", w=self, msecShowTime=2000) # Mensagem atualizada
     def request_new_url(self):
         self.action = 'new_url'; self.accept()
     def request_new_project(self):
@@ -476,7 +496,7 @@ class AddPadDialog(QDialog):
         self.name_edit.setMaxLength(50)
 
         self.url_edit = QLineEdit()
-        self.url_edit.setPlaceholderText("https://pad.riseup.net/p/exemplo-de-link")
+        self.url_edit.setPlaceholderText("https://pad.instancia.exemplo/p/exemplo-de-link")
         
         layout.addRow("Nome do Projeto:", self.name_edit)
         layout.addRow("URL do Pad:", self.url_edit)
@@ -724,9 +744,8 @@ class MainWindow(QMainWindow):
         if message.startswith(prefix):
             # Extrai a URL, gera o ID e formata a nova mensagem
             url = message[len(prefix):].replace("...", "")
-            real_id = url.split('/')[-1]
-            masked_id = mask_pad_id(real_id)
-            new_message = f"Conectando ao ID: {masked_id}..."
+            masked_url = mask_url(url) # Mascara a URL completa
+            new_message = f"Conectando ao Projeto: {masked_url}..." # Mensagem mais genérica
             self.statusBar().showMessage(new_message, timeout)
         else:
             # Para todas as outras mensagens, exibe normalmente
@@ -744,7 +763,7 @@ class MainWindow(QMainWindow):
             action.triggered.connect(callback)
             project_menu.addAction(action)
 
-        self.copy_url_action = QAction("Copiar ID do Projeto", self)
+        self.copy_url_action = QAction("Copiar Link do Projeto", self)
         self.copy_url_action.triggered.connect(self.copy_project_url)
         project_menu.addAction(self.copy_url_action)
 
@@ -829,7 +848,7 @@ class MainWindow(QMainWindow):
         self.copy_url_action.setEnabled(is_connected)
         self.tabs.setEnabled(is_connected)
         self.restart_action.setEnabled(is_connected) 
-        
+
         if not is_connected:
             self.setWindowTitle("Gerenciador de Tarefas Etherpad")
             self.tasks = {}
@@ -837,17 +856,18 @@ class MainWindow(QMainWindow):
             self.sync_timer.stop()
         else:
             project_name = None
-            project_id = project_history.get_id_from_url(self.pad_url)
+            # A linha que causava o erro foi REMOVIDA.
+            # A variável 'project_id' não é mais necessária aqui.
 
             # LÓGICA INTELIGENTE PARA DEFINIR O NOME CORRETO
             # 1. Prioridade máxima: O nome que o usuário acabou de digitar para um novo projeto.
             if self.last_project_name_input:
                 project_name = self.last_project_name_input
                 self.last_project_name_input = None # Limpa a variável após o uso
-            
+
             # 2. Segunda prioridade: O nome que já está salvo no histórico.
             if not project_name:
-                project_name = project_history.get_project_name_by_id(project_id)
+                project_name = project_history.get_project_name_by_url(self.pad_url) 
 
             # 3. Último recurso: Se não temos um nome (ex: conectar por um ID novo), "adivinha" da URL.
             if not project_name:
@@ -856,7 +876,7 @@ class MainWindow(QMainWindow):
             # USA O NOME CORRETO EM TODOS OS LUGARES
             self.setWindowTitle(f"Projeto: {project_name}")
             project_history.add_or_update_project(self.pad_url, project_name)
-            
+
             if not self.sync_timer.isActive():
                 self.sync_timer.start(30000)
 
@@ -883,23 +903,24 @@ class MainWindow(QMainWindow):
         return False
 
     def connect_to_project(self, url=None):
-        """Inicia a conexão com um projeto existente (a partir de uma URL real ou de um ID mascarado)."""
-        base_url = "https://pad.riseup.net/p/"
-        
+        """Inicia a conexão com um projeto existente (a partir de uma URL real ou de uma URL mascarada)."""
+        # A variável base_url foi REMOVIDA
+
         if not url:
-            # Pede o ID mascarado ao usuário
-            masked_id, ok = QInputDialog.getText(self, "Conectar por ID", "Cole o ID do Projeto:")
-            if not (ok and masked_id):
+            # Pede a URL mascarada completa ao usuário
+            masked_url, ok = QInputDialog.getText(self, "Conectar por Link", "Cole o link mascarado do Projeto:")
+            if not (ok and masked_url):
                 return False
-            
-            # Desmascara o ID para obter o ID real
-            real_id = unmask_pad_id(masked_id.strip())
-            
-            if not real_id:
-                QMessageBox.critical(self, "Erro", "O ID fornecido é inválido ou está corrompido.")
+
+            # Desmascara a string para obter a URL real e completa
+            real_url = unmask_url(masked_url.strip()) # <--- USANDO A NOVA FUNÇÃO
+
+            if not real_url:
+                QMessageBox.critical(self, "Erro", "O link fornecido é inválido ou está corrompido.")
                 return False
-            
-            url = base_url + real_id
+
+            # A URL desmascarada já é o link completo e pronto para uso
+            url = real_url # <--- ATRIBUIÇÃO DIRETA
 
         self.pad_url = url.strip()
         QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -976,8 +997,7 @@ class MainWindow(QMainWindow):
         self.pad_url = url
         
         # Gera o ID mascarado a partir da URL real recebida
-        real_id = url.split('/')[-1]
-        masked_id = mask_pad_id(real_id)
+        masked_url = mask_url(url)
 
         if self.last_project_keep_duration:
             duration_message = "O seu projeto será excluído após o período de inatividade configurado na criação do pad."
@@ -985,7 +1005,7 @@ class MainWindow(QMainWindow):
             duration_message = "O seu projeto será excluído após o período de inatividade configurado na criação do pad."
         
         # Usa o ID mascarado na mensagem para o usuário
-        full_message = f"Novo projeto criado com o ID:\n{masked_id}\n\n{duration_message}\n\nConectando automaticamente..."
+        full_message = f"Novo projeto criado com o Link:\n{masked_url}\n\n{duration_message}\n\nConectando automaticamente..."
         
         QTimer.singleShot(0, lambda: QMessageBox.information(self, "Sucesso", full_message))
         self.last_project_keep_duration = False # Reseta a variável
@@ -1037,11 +1057,9 @@ class MainWindow(QMainWindow):
     def copy_project_url(self):
         if self.pad_url:
             # Extrai o ID real da URL completa
-            real_id = self.pad_url.split('/')[-1]
-            # Mascara o ID e copia para a área de transferência
-            masked_id = mask_pad_id(real_id)
-            QApplication.clipboard().setText(masked_id)
-            self.statusBar().showMessage("ID do Projeto copiado.", 3000)
+            masked_url = mask_url(self.pad_url) # Mascara a URL completa
+            QApplication.clipboard().setText(masked_url)
+            self.statusBar().showMessage("Link do Projeto copiado.", 3000) # Mensagem atualizada
 
     def on_tasks_updated(self, tasks):
         QApplication.restoreOverrideCursor()
