@@ -1,0 +1,12 @@
+#ignorar o arquivo de projetos
+projects.json
+
+# Ignorar cache do Python
+__pycache__/
+*.pyc
+
+# Ignorar configs do VSCode
+.vscode/
+
+#ignorar arquivos de log
+logs.md
