@@ -156,6 +156,7 @@ Você pode encontrar uma lista extensa de instâncias públicas e testá-las por
     -   *Exemplo bom:* `meu-projeto-secreto-7k2j9f5b3p`
     Isso dificulta que pessoas não autorizadas adivinhem o link do seu pad. Felizmente, a maioria das instâncias modernas já oferece a criação de pads com nomes aleatórios.
 5.  **Aviso sobre Retenção de Dados**: A disponibilidade e as políticas de retenção de dados das instâncias públicas estão fora do controle deste projeto. Muitos servidores gratuitos podem apagar pads inativos. **Use este software ciente de que seus dados podem não ser permanentes.**
+6.  A aplicação foi criada para atender as minhas necessidades como desenvolvedor, principalmente referente a layout, então existem coisas que podem não fazer sentido para você mas para mim faz.
 
 ---
 
