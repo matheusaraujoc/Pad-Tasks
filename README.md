@@ -1,7 +1,7 @@
 # Gerenciador de Tarefas com Etherpad
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
+![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)
 ![Status](https://img.shields.io/badge/Status-Est%C3%A1vel-brightgreen)
 
 Um gerenciador de tarefas desktop, colaborativo e anônimo que utiliza instâncias públicas de **Etherpad** como um banco de dados em tempo real, sem a necessidade de cadastro ou servidor próprio.
@@ -46,6 +46,20 @@ Para a maioria dos usuários, basta baixar e executar.
 1.  Acesse a seção **[Releases](https://github.com/seu-usuario/seu-repositorio/releases)** deste repositório.
 2.  Baixe o arquivo executável para o seu sistema operacional (ex: `GerenciadorDeTarefas.exe` para Windows).
 3.  Execute o arquivo. Não é necessária instalação.
+
+### ⚠️ Aviso para Usuários Windows (Filtro SmartScreen)
+
+Ao executar o programa pela primeira vez, é provável que o Windows Defender SmartScreen exiba uma tela azul impedindo a execução, com a mensagem "O Windows protegeu o computador".
+
+**Isso é um comportamento normal e esperado.** Acontece porque o aplicativo não possui uma assinatura digital de uma empresa registrada na Microsoft. **O programa é seguro e não contém vírus.**
+
+Para executar, siga estes passos:
+1. Na tela azul, clique em **"Mais informações"**.
+2. Um novo botão, **"Executar assim mesmo"**, aparecerá. Clique nele.
+
+![Filtro SmartScreen](https://i.imgur.com/20nLe5P.png)
+
+Você só precisará fazer isso na primeira vez que abrir o programa.
 
 ---
 
@@ -147,26 +161,20 @@ Você pode encontrar uma lista extensa de instâncias públicas e testá-las por
 
 ## Licença
 
-Este projeto está licenciado sob a Licença MIT.
+Este projeto e seu código-fonte são licenciados sob a **Creative Commons Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional (CC BY-NC-SA 4.0)**.
 
-MIT License
+[![CC BY-NC-SA 4.0](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-Copyright (c) 2025 Matheus Araújo Carvalho
+Isso significa que você tem a liberdade de:
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+-   **Compartilhar** — copiar e redistribuir o material em qualquer suporte ou formato.
+-   **Adaptar** — remixar, transformar e criar a partir do material.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Sob os seguintes termos:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+-   **Atribuição** — Você deve dar o **crédito apropriado** a **Matheus Araújo Carvalho**, prover um link para a licença e indicar se foram feitas alterações.
+-   **NãoComercial** — Você **não pode** usar o material para fins comerciais.
+-   **CompartilhaIgual** — Se você remixar, transformar ou criar a partir do material, deverá distribuir suas contribuições sob a **mesma licença** que o original.
+
+Para ver uma cópia completa desta licença, visite:
+[http://creativecommons.org/licenses/by-nc-sa/4.0/](http://creativecommons.org/licenses/by-nc-sa/4.0/)
