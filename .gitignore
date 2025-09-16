@@ -1,4 +1,4 @@
-#ignorar o arquivo de projetos
+#Ignorar o arquivo de projetos
 projects.json
 
 # Ignorar cache do Python
@@ -8,5 +8,5 @@ __pycache__/
 # Ignorar configs do VSCode
 .vscode/
 
-#ignorar arquivos de log
+#Ignorar arquivos de log
 logs.md

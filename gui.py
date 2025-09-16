@@ -980,9 +980,9 @@ class MainWindow(QMainWindow):
         masked_id = mask_pad_id(real_id)
 
         if self.last_project_keep_duration:
-            duration_message = "O seu projeto será excluído após 365 dias de inatividade."
+            duration_message = "O seu projeto será excluído após o período de inatividade configurado na criação do pad."
         else:
-            duration_message = "O seu projeto será excluído após 60 dias de inatividade."
+            duration_message = "O seu projeto será excluído após o período de inatividade configurado na criação do pad."
         
         # Usa o ID mascarado na mensagem para o usuário
         full_message = f"Novo projeto criado com o ID:\n{masked_id}\n\n{duration_message}\n\nConectando automaticamente..."

@@ -73,8 +73,25 @@ class SeleniumManager:
             WebDriverWait(self.driver, 1).until(EC.frame_to_be_available_and_switch_to_it((By.NAME, "ace_inner")))
         except TimeoutException:
             self.driver.get(self.url)
+
+            # --- INÍCIO DA CORREÇÃO PARA O DISROOT ---
+            # Procura pelo banner de cookies e o aceita, se existir.
+            # Usamos um timeout curto e um try/except para não quebrar em sites que não têm o banner.
+            try:
+                cookie_banner_accept_button = WebDriverWait(self.driver, 5).until(
+                    EC.element_to_be_clickable((By.CLASS_NAME, "cc-allow"))
+                )
+                cookie_banner_accept_button.click()
+                time.sleep(1) # Pequena pausa para a animação do banner desaparecer
+            except TimeoutException:
+                # O banner não foi encontrado, o que é normal em outros sites. Segue o fluxo.
+                pass
+            # --- FIM DA CORREÇÃO ---
+
+            # Continua com a lógica original de encontrar os iframes do editor
             WebDriverWait(self.driver, 20).until(EC.frame_to_be_available_and_switch_to_it((By.NAME, "ace_outer")))
             WebDriverWait(self.driver, 20).until(EC.frame_to_be_available_and_switch_to_it((By.NAME, "ace_inner")))
+        
         return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "innerdocbody")))
 
     # <--- INÍCIO DA ADIÇÃO: MÉTODOS ROBUSTOS DE ESCRITA E LIMPEZA --->
