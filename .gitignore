@@ -10,3 +10,6 @@ __pycache__/
 
 #Ignorar arquivos de log
 logs.md
+
+#Ignora a pasta de compilação
+output/
